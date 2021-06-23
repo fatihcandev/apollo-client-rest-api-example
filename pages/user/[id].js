@@ -39,6 +39,11 @@ export default function UserDetails() {
   const handleDelete = () => {
     deleteUser({
       variables: { id },
+      update: cache => {
+        const normalizedId = cache.identify({ id, __typename: 'Person' })
+        cache.evict({ id: normalizedId })
+        cache.gc()
+      },
     }).then(() => {
       push('/')
     })
